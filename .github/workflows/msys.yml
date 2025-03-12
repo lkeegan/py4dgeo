@@ -1,0 +1,29 @@
+name: CI
+
+on: push
+
+jobs:
+  msys:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    - name: Setup msys2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: true
+        install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-pip mingw-w64-ucrt-x86_64-ninja
+
+    - shell: msys2 {0}
+      run: |
+        # Use native Windows python to call cibuildwheel
+        PYDIR=$(ls -d /c/hostedtoolcache/windows/Python/3.12.*)
+        export PATH="$PYDIR/x64:$PYDIR/x64/Scripts:$PATH"
+        python --version
+        python -m pip install cibuildwheel
+        python -m cibuildwheel --output-dir ./dist
+        ls ./dist/*
