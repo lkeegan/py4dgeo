@@ -48,6 +48,7 @@ add_library(py4dgeo lib/directions.cpp lib/distances.cpp lib/epoch.cpp
 target_include_directories(
   py4dgeo PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/ext/eigen
                  ${CMAKE_SOURCE_DIR}/ext/nanoflann/include)
+target_link_libraries(py4dgeo PUBLIC -static;-static-libgcc;-static-libstdc++)
 if(PY4DGEO_WITH_OPENMP)
   find_package(OpenMP)
   if(OpenMP_FOUND)
