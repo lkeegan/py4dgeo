@@ -62,6 +62,11 @@ build-verbosity = 3
 # We only do 64 bit builds
 archs = ["auto64"]
 
+# Use delvewheel on windows
+[tool.cibuildwheel.windows]
+before-build = "pip install delvewheel"
+repair-wheel-command = "delvewheel repair -w {dest_dir} {wheel}"
+
 # We restrict ourselves to recent Python versions.
 # We temporarily skip win32 builds, because lazrs
 # does not provide Win32 wheels.
