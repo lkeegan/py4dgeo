@@ -13,3 +13,6 @@
 [submodule "ext/benchmark"]
 	path = ext/benchmark
 	url = https://github.com/google/benchmark
+[submodule "ext/fast_float"]
+	path = ext/fast_float
+	url = https://github.com/fastfloat/fast_float

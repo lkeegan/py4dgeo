@@ -11,6 +11,9 @@
 #define DATAPATH(filename) PY4DGEO_TEST_DATA_DIRECTORY "/" #filename
 
 std::shared_ptr<py4dgeo::EigenPointCloud>
+benchcloud_from_file_fast_float(const std::string& filename);
+
+std::shared_ptr<py4dgeo::EigenPointCloud>
 benchcloud_from_file(const std::string& filename);
 
 std::shared_ptr<py4dgeo::EigenPointCloud>

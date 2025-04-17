@@ -1,4 +1,5 @@
 #include "testsetup.hpp"
+#include <fast_float/fast_float.h>
 
 #include <fstream>
 #include <limits>
@@ -9,6 +10,40 @@
 #include <iostream>
 
 using namespace py4dgeo;
+
+std::shared_ptr<EigenPointCloud>
+benchcloud_from_file_fast_float(const std::string& filename)
+{
+  std::ifstream stream(filename);
+  if (!stream) {
+    std::cerr << "Was not successfully opened. Please check that the file "
+                 "currently exists: "
+              << filename << std::endl;
+    std::exit(1);
+  }
+
+  std::vector<Eigen::Vector3d> points;
+  Eigen::Vector3d mincoord =
+    Eigen::Vector3d::Constant(std::numeric_limits<double>::infinity());
+
+  std::string line;
+  fast_float::from_chars_result res;
+  while (std::getline(stream, line)) {
+    auto& point = points.emplace_back();
+    res = fast_float::from_chars<double>(line.data(), line.data() + line.size(), point[0]);
+    // if (res.ec != std::errc(()){// handle error}
+    res = fast_float::from_chars<double>(res.ptr+1, line.data() + line.size(), point[1]);
+    res = fast_float::from_chars<double>(res.ptr+1, line.data() + line.size(), point[2]);
+    mincoord = mincoord.cwiseMin(point);
+  }
+
+  auto cloud = std::make_shared<EigenPointCloud>(points.size(), 3);
+  for (std::size_t i = 0; i < points.size(); ++i) {
+    (*cloud).row(i) = points[i] - mincoord;
+  }
+
+  return cloud;
+}
 
 std::shared_ptr<EigenPointCloud>
 benchcloud_from_file(const std::string& filename)

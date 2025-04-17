@@ -41,9 +41,7 @@ main(int argc, char** argv)
 
   std::string filename = argv[1];
 
-  auto cloud = benchcloud_from_file(filename);
-  auto cloud_old = benchcloud_from_file_old(filename);
-  benchmark(cloud_old);
+  auto cloud = benchcloud_from_file_fast_float(filename);
   benchmark(cloud);
 
   return 0;

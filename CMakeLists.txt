@@ -48,6 +48,7 @@ add_library(py4dgeo lib/directions.cpp lib/distances.cpp lib/epoch.cpp
 target_include_directories(
   py4dgeo PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/ext/eigen
                  ${CMAKE_SOURCE_DIR}/ext/nanoflann/include)
+target_link_libraries(py4dgeo PUBLIC fast_float)
 if(PY4DGEO_WITH_OPENMP)
   if(MSVC)
     include(CheckCXXCompilerFlag)
@@ -95,6 +96,7 @@ if(BUILD_PYTHON)
   install(TARGETS _py4dgeo DESTINATION .)
 endif()
 
+add_subdirectory(ext/fast_float)
 add_subdirectory(minimal_benchmark)
 
 # This prints a summary of found dependencies
